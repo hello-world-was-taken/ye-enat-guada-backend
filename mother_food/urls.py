@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from users import views
+from users.views import UserUploadedPicture
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('<str:username>/<str:password>', views.fun)
+    # path('<str:username>/<str:password>', views.fun),
+    path('reg/', UserUploadedPicture.as_view())
 ]
