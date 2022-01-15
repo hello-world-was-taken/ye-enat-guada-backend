@@ -1,21 +1,16 @@
 from dataclasses import fields
 from django.contrib import admin
-from .models import Customer, Vendor, User
+from .models import Customer, Vendor
+# from .models import User
 
-# Register your models here.
 # admin.site.register(User)
 
-# class UserInline(admin.StackedInline):
-#     model = User
-#     fields = ['username', 'password']
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'rating', 'image')
+    fields=('username', 'password', 'phone_number', 'rating', 'image')
 
-# class CustomerAdmin(admin.ModelAdmin):
-#     inlines = [UserInline]
-
-# class VendorAdmin(admin.ModelAdmin):
-#     inlines = [UserInline]
-
-# admin.site.unregister(User)
-admin.site.register(Customer)
-admin.site.register(Vendor)
-admin.site.register(User)
+class VendorAdmin(admin.ModelAdmin):
+    fields=('username', 'phone_number', 'rating', 'image', 'long', 'lat')
+    list_display = ('user', 'password', 'phone_number', 'rating', 'image')
+admin.site.register(Customer, CustomerAdmin)
+admin.site.register(Vendor, VendorAdmin)
