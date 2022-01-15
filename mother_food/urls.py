@@ -18,11 +18,13 @@ from django.urls import path
 from users.views import RegisterVendor, RegisterCustomer
 from django.conf import settings
 from django.conf.urls.static import static
+from users.views import login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/v', RegisterVendor.as_view()),
-    path('register/c', RegisterCustomer.as_view())
+    path('register/c', RegisterCustomer.as_view()),
+    path('login/', login)
 ]
 
 if settings.DEBUG:
