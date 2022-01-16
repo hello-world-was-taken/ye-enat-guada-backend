@@ -1,6 +1,6 @@
 from urllib import request
 from rest_framework import serializers
-from .models import Vendor, Customer, Dish
+from .models import Vendor, Customer, Dish, Order
 from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 import json
@@ -27,6 +27,7 @@ class VendorSerializer(serializers.ModelSerializer):
 
         c_user = get_user_model().objects.create_user(**user)
         c_user.user_type = c_user.UserType.VENDOR
+        # c_user.save()
         
         return Vendor.objects.create_user(user=c_user, image=image, **validated_data)
 
@@ -48,13 +49,18 @@ class CustomerSerializer(serializers.ModelSerializer):
         return Customer.objects.create_user(user=c_user, image=image, **validated_data)
 
 
-class UserChildSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=True)
-    class Meta:
-        model = Customer
-        fields = ('user', 'phone_number', 'rating', 'image')
+# class UserChildSerializer(serializers.ModelSerializer):
+#     user = UserSerializer(many=True)
+#     class Meta:
+#         model = Customer
+#         fields = ('user', 'phone_number', 'rating', 'image')
 
 class DishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dish
         fields = ('d_name', 'd_price', 'd_provider')
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('ordered_by', 'm_ordered', 'orderd_on', 'ready')

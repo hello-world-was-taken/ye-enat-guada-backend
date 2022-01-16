@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from .managers import VendorManager
-from .managers import CustomerManager
+from .managers import CustomerManager, UserManager
 
 class User(AbstractUser):
     class UserType(models.TextChoices):
@@ -12,6 +12,7 @@ class User(AbstractUser):
         VENDOR = 'vendor', _('Vendor')
         
     user_type = models.CharField(max_length=15, choices=UserType.choices, default=UserType.CUSTOMER,)
+    objects = UserManager()
 
 class Customer(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, primary_key=True)
@@ -56,9 +57,9 @@ class Client(models.Model):
         return f"orderd by: {self.ordered_by} ordered_mother_bet: {self.m_ordered} on: {self.orderd_on}"
 
 class Dish(models.Model):
-    d_provider = models.ForeignKey(Customer, on_delete=models.CASCADE) # The mother bet with dish on the menu
+    d_provider = models.ForeignKey(get_user_model(), on_delete=models.CASCADE) # The mother bet with dish on the menu
     d_name = models.CharField(max_length=255, null=False, blank=False)
     d_price = models.FloatField(null=False, blank=False)
 
     def __str__(self):
-        return self.d_name
+        return f"{self.d_name} {self.d_provider}"
