@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 # Register as Vendor - Mother bet owner
 class RegisterVendor(APIView):
     parser_classes = (MultiPartParser, FormParser)
+
     def post(self, request, format=None):
         user = request.data.get("user")
         dic = {}
@@ -24,6 +25,7 @@ class RegisterVendor(APIView):
 # Register as Customer
 class RegisterCustomer(APIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
     def post(self, request, format=None):
         user = request.data.get("user")
         dic = {}
@@ -39,6 +41,7 @@ class RegisterCustomer(APIView):
 class DeleteAccount(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser, JSONParser)
+
     def post(self, request, format=None):
         u_id = request.user.id
         get_user_model().objects.filter(id=u_id).first().delete()
@@ -60,9 +63,6 @@ class GetUserData(APIView):
             vendor = Vendor.objects.filter(user=user).first()
             serializer = VendorSerializer(vendor)
         return JsonResponse(serializer.data)
-
-
-
 
 
 class DishView(APIView):
@@ -101,25 +101,12 @@ class DishView(APIView):
 
     # Get menu of the specified Mother bet
     def get(self, request):
-        d_provider = request.data['d_provider'] # here the d_provider is for the owner's of the Mother bet
+        # here the d_provider is for the owner's of the Mother bet
+        d_provider = request.data['d_provider']
         u = get_user_model().objects.get(id=d_provider)
         dish_list = Dish.objects.all().filter(d_provider=u)
         dish = DishSerializer(dish_list, many=True)
         return JsonResponse(dish.data, status=200, safe=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class OrderView(APIView):
@@ -135,7 +122,6 @@ class OrderView(APIView):
 
     # Allows vendors to update if a food is ready or not. Customer doesn't have the priviledge to do so.
     def put(self, request):
-        
         if not request.user.user_type == 'vendor':
             return JsonResponse("You are not a vendor", status=400, safe=False)
         order_id = request.data['id']
@@ -153,7 +139,8 @@ class OrderView(APIView):
 
     # Return the amount of order prior.
     def get(self, request):
-        mother_bet_id = request.data['mother_bet'] # here the d_provider is for the owner's of the Mother bet
+        # here the d_provider is for the owner's of the Mother bet
+        mother_bet_id = request.data['mother_bet']
         u = Order.objects.get(m_ordered=mother_bet_id)
         order = OrderSerializer(u, many=True)
         return JsonResponse(order.data, status=200, safe=False)
