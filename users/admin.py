@@ -7,7 +7,7 @@ from .models import Customer, Vendor
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone_number', 'rating', 'image')
-    fields=('username', 'password', 'phone_number', 'rating', 'image')
+    # fields=( 'phone_number', 'rating', 'image')
 
 class VendorAdmin(admin.ModelAdmin):
     fields=('username', 'phone_number', 'rating', 'image', 'long', 'lat')

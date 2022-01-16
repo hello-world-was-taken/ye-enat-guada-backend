@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from users.views import RegisterVendor, RegisterCustomer
+from users.views import RegisterVendor, RegisterCustomer, GetUserData
 from django.conf import settings
 from django.conf.urls.static import static
 from users.views import login
@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/v', RegisterVendor.as_view()),
     path('register/c', RegisterCustomer.as_view()),
-    path('login/', login)
+    path('login/', login),
+    path('customer/<str:username>', GetUserData.as_view())
 ]
 
 if settings.DEBUG:

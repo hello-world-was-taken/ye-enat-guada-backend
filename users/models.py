@@ -22,8 +22,8 @@ class Vendor(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    username = models.CharField(max_length=255, null=False)
-    password = models.CharField(max_length=255, null=False)
+    # username = models.CharField(max_length=255, null=False)
+    # password = models.CharField(max_length=255, null=False)
     phone_number = models.IntegerField(null=False)
     rating = models.IntegerField()
     image = models.ImageField(null=True, blank=True, upload_to="images/")

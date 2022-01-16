@@ -57,14 +57,14 @@ class VendorManager(models.Manager):
         return v_user
 
 class CustomerManager(models.Manager):
-    def create_user(self, username, password, phone_number, rating, image=None, email=None, **extra_fields):
+    def create_user(self, user, phone_number, rating, image=None, email=None, **extra_fields):
         """
         Create and save a User with the given email and password.
         """
-        if not username:
+        if not user:
             raise ValueError(_('The Username must be set'))
         # username = self.normalize_???(username)
-        user= get_user_model().objects.create_user(username=username, password=password)
+        # user= get_user_model().objects.create_user(username=username, password=password)
         c_user = self.model(user=user, phone_number=phone_number, rating=rating, image=image, email=email, **extra_fields)
         # user.set_password(password)
         c_user.save()
