@@ -19,9 +19,15 @@ class RegisterVendor(APIView):
     parser_classes = (MultiPartParser, )
 
     def post(self, request, format=None):
+        user = request.data.get("user")
+        print(user)
+        print(request.data)
+        dic = {}
+        dic['user'] = user
+        print(dic)
         print(request.data)
         print("\n\n\n")
-        serializer = VendorSerializer(data=request.data)
+        serializer = VendorSerializer(data=request.data, context=dic)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)

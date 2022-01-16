@@ -13,20 +13,25 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class VendorSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(many=False)
+    user = UserSerializer(many=False, required=False) # to get around the {'user':'this field is required'} error
     class Meta:
         model = Vendor
-        fields = ['username', 'phone_number', 'image',
-                  'password', 'rating', 'long', 'lat']
+        fields = ['user', 'phone_number', 'image', 'rating', 'long', 'lat']
 
     def create(self, validated_data):
+        # print(validated_data)
+        validated_data.update(self.context)
         image = validated_data.pop('image')
+        user = validated_data.pop('user')
 
-        return Vendor.objects.create_user(image=image, **validated_data)
+        user = json.loads(user)
+
+        c_user = User.objects.create_user(**user)
+        return Vendor.objects.create_user(user=c_user, image=image, **validated_data)
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    print("haaaaaaaaaaaaaaaaaaaaaaaaa")
+    # print("haaaaaaaaaaaaaaaaaaaaaaaaa")
     user = UserSerializer(many=False, required=False)
     class Meta:
         model = Customer
@@ -38,12 +43,12 @@ class CustomerSerializer(serializers.ModelSerializer):
         validated_data.update(self.context)
         # print(res)
         image = validated_data.pop('image')
-        user = validated_data.pop('user')
-        print(user)
-        user = json.loads(user)
-        print(type(user))
-        print("\n")
-        print("\n")
+        user = validated_data.pop('user') # work around NEEDS A BETTER SOLUTION
+        # print(user)
+        user = json.loads(user) # changes the string to a dictionary
+        # print(type(user))
+        # print("\n")
+        # print("\n")
         
         # for user_data in user:
         c_user = User.objects.create_user(**user)
