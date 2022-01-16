@@ -9,7 +9,7 @@ import json
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'user_type')
+        fields = ('id', 'username', 'user_type', 'first_name', 'last_name', 'email')
 
 
 class VendorSerializer(serializers.ModelSerializer):

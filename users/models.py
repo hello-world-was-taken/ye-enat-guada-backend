@@ -11,7 +11,6 @@ class User(AbstractUser):
         CUSTOMER = 'customer', _('Customer')
         VENDOR = 'vendor', _('Vendor')
         
-
     user_type = models.CharField(max_length=15, choices=UserType.choices, default=UserType.CUSTOMER,)
 
 class Customer(models.Model):
