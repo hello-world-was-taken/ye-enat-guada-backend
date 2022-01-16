@@ -1,15 +1,15 @@
 from urllib import request
 from rest_framework import serializers
-from .models import Vendor, Customer
-from django.contrib.auth.models import User
+from .models import Vendor, Customer, Dish
+from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 import json
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('id', 'username')
+        model = get_user_model()
+        fields = ('id', 'username', 'user_type')
 
 
 class VendorSerializer(serializers.ModelSerializer):
@@ -25,7 +25,9 @@ class VendorSerializer(serializers.ModelSerializer):
 
         user = json.loads(user)
 
-        c_user = User.objects.create_user(**user)
+        c_user = get_user_model().objects.create_user(**user)
+        c_user.user_type = c_user.UserType.VENDOR
+        
         return Vendor.objects.create_user(user=c_user, image=image, **validated_data)
 
 
@@ -40,7 +42,8 @@ class CustomerSerializer(serializers.ModelSerializer):
         image = validated_data.pop('image')
         user = validated_data.pop('user') # work around NEEDS A BETTER SOLUTION
         user = json.loads(user) # changes the string to a dictionary
-        c_user = User.objects.create_user(**user)
+        c_user = get_user_model().objects.create_user(**user)
+        c_user.user_type = c_user.UserType.CUSTOMER
 
         return Customer.objects.create_user(user=c_user, image=image, **validated_data)
 
@@ -50,3 +53,8 @@ class UserChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('user', 'phone_number', 'rating', 'image')
+
+class DishSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dish
+        fields = ('d_name', 'd_price', 'd_provider')

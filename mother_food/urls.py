@@ -15,16 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from users.views import RegisterVendor, RegisterCustomer, GetUserData, Login
+from users.views import RegisterVendor, RegisterCustomer, GetUserData, AddDish, Dummy
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/v', RegisterVendor.as_view()),
-    path('register/c', RegisterCustomer.as_view()),
-    path('login/', Login.as_view()),
-    path('customer/<str:username>', GetUserData.as_view()),
+    path('dummy/', Dummy.as_view()),
+    path('api/register-vendor', RegisterVendor.as_view()),
+    path('api/register-customer', RegisterCustomer.as_view()),
+    path('api/customer/<str:username>', GetUserData.as_view()),
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/user-detail', GetUserData.as_view()),
+    path('api/vendor/add-dish', AddDish.as_view())
+    
 ]
 
 if settings.DEBUG:
